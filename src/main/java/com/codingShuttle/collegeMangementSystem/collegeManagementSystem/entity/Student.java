@@ -1,6 +1,8 @@
 package com.codingShuttle.collegeMangementSystem.collegeManagementSystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +24,7 @@ public class Student {
 
     // Many-to-many relation between Students and Professors entity
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "student_professor",
             joinColumns = @JoinColumn(name = "student_id"),
@@ -42,4 +45,8 @@ public class Student {
     @OneToOne
     @JoinColumn(name = "admission_record_id")
     private AdmissionRecord admissionRecord;
+
+    @ManyToOne
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 }

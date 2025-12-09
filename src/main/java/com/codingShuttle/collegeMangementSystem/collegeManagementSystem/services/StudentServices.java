@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class StudentServices {
@@ -32,7 +34,7 @@ public class StudentServices {
     }
 
     @Transactional
-    public Student assignProfessorToStudent(Long studentid, Long professor_id){
+    public Student assignStudentToProfessor(Long studentid, Long professor_id){
 
         //Since there is student and professor relation need to include both to get the data.
         Student student = studentRepository.findById(studentid).orElseThrow();
@@ -47,7 +49,7 @@ public class StudentServices {
     }
 
     @Transactional
-    public Student assignSubjectToStudent(Long studentid, Long subjectId){
+    public Student assignStudentToSubject(Long studentid, Long subjectId){
 
         //Since there is student and subject relation need to include both to get the data.
         Student student = studentRepository.findById(studentid).orElseThrow();
@@ -61,16 +63,9 @@ public class StudentServices {
 
     }
 
-    @Transactional
-    public AdmissionRecord createAdmissionRecordForStudent(Long studentId, AdmissionRecord record){
-
-        //Since there is student and admissionRecord relation need to include both to get the data.
-        Student student = studentRepository.findById(studentId).orElseThrow();
-        //For each record there will be one student
-        record.setStudent(student);
-        record = admissionRecordRepository.save(record);
-        student.setAdmissionRecord(record);
-        return record;
+    //Just to get all the student
+    public List<Student> listOfStudents() {
+        return studentRepository.findAll();
     }
 
 }

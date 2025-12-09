@@ -1,6 +1,7 @@
 package com.codingShuttle.collegeMangementSystem.collegeManagementSystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,13 +17,18 @@ import java.util.List;
 @ToString
 public class Professor {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
 
     private String title;
 
-    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Subject> subjects = new ArrayList<>();
-    @ManyToMany(mappedBy = "professors")
+
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
     private List<Student> students = new ArrayList<>();
 }

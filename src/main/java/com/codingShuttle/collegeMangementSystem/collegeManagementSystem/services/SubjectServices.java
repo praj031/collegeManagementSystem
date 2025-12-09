@@ -36,14 +36,10 @@ public class SubjectServices {
         subjectRepository.deleteById(id);
     }
 
-    // Business Logic
-    @Transactional
-    public void assignProfessorToSubject(Long subjectId, Long professorId) {
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow();
-        Professor professor = professorRepository.findById(professorId).orElseThrow();
-        subject.setProfessor(professor);
-        professor.getSubjects().add(subject);
-        subjectRepository.save(subject);
+    public List<Subject> listOfAllSubject(){
+        return subjectRepository.findAll();
     }
+
+
 
 }

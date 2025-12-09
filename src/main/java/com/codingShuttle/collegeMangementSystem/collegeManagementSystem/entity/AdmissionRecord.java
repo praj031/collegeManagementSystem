@@ -19,7 +19,7 @@ public class AdmissionRecord {
     private Integer fees;
 
     //Since there is one to one mapping record of student
-    @OneToOne(mappedBy = "admissionRecord", cascade = CascadeType.ALL)
+    @OneToOne
     private Student student;
 
 }

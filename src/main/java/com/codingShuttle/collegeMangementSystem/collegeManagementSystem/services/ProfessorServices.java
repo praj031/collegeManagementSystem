@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProfessorServices {
@@ -27,35 +29,25 @@ public class ProfessorServices {
     }
 
     @Transactional
-    public void assignProfessorToSubject(Long professorId, Long subjectId){
+    public Professor assignProfessorToSubject(Long professorId, Long subjectId) {
 
         Professor professor = professorRepository.findById(professorId).orElseThrow();
+
         Subject subject = subjectRepository.findById(subjectId).orElseThrow();
 
-
-        //Vice versa mapping b/w professor and subject
-        //First professor will get the subject and then subject will be assigned to professor
         professor.getSubjects().add(subject);
-        subject.setProfessor(professor);
+        subject.getProfessor().add(professor);
 
-        professorRepository.save(professor);
+        subjectRepository.save(subject);
 
+        return professor;
     }
 
-
-    @Transactional
-    public void assignStudent(Long professorId, Long studentId) {
-        Professor professor = professorRepository.findById(professorId)
-                .orElseThrow();
-
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow();
-
-        professor.getStudents().add(student);
-        student.getProfessors().add(professor);
-
-        professorRepository.save(professor);
+    //TO get all the professor
+    public List<Professor> listOfProfessors() {
+        return professorRepository.findAll();
     }
+
 
 
 }

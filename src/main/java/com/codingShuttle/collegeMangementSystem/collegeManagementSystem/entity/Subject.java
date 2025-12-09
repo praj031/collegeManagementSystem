@@ -1,5 +1,6 @@
 package com.codingShuttle.collegeMangementSystem.collegeManagementSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,15 +19,20 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true, length = 100)
-    private String title;
-    @ManyToOne
-    @JoinColumn(name = "professor_id")
-    private Professor professor;
-    // Many-to-many students
-    @ManyToMany(mappedBy = "subjects")
-    private List<Student> students = new ArrayList<>();
 
+    private String title;
+
+    @ManyToMany
+    @JoinTable(
+            name = "subject_professor",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "professor_id")
+    )
+    private List<Professor> professor = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "subjects")
+    @JsonIgnore
+    private List<Student> students = new ArrayList<>();
 }
 
 
