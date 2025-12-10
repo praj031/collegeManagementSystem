@@ -1,7 +1,9 @@
 package com.codingShuttle.collegeMangementSystem.collegeManagementSystem;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class CollegeManagementSystemApplication {
@@ -24,6 +26,15 @@ public class CollegeManagementSystemApplication {
          */
 
 
+
+
+
 	}
+
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
 }
