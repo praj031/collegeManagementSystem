@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails { // Here we can see User details that helps us implements all the methods
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

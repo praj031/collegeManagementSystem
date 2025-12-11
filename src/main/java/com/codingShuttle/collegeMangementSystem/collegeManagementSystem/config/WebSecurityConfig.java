@@ -42,11 +42,14 @@ public class WebSecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/posts","/auth/**").permitAll()
+                        .requestMatchers( "/posts/**","/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/posts/**").permitAll()
                         .anyRequest().authenticated())
                         .csrf(csrfConfig -> csrfConfig.disable())
                         .sessionManagement(sessionConfig -> sessionConfig
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))  //Each request must provide credentials
+                //.addFilterBefore(xyzFilter, jwtAuthFilter.class),
                 .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);
 
 

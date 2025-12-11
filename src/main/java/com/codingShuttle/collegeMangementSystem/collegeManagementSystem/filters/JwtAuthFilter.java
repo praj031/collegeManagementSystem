@@ -23,7 +23,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter { //We need to take in all the request and we will authenticate
 
     private final JwtService jwtService;
 
@@ -35,11 +35,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
         if (requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer")) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);//It will move to next filter
             return;
         }
             String token = requestTokenHeader.split("Bearer ")[1];
