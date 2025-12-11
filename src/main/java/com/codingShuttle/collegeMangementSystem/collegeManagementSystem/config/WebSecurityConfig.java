@@ -3,7 +3,9 @@ package com.codingShuttle.collegeMangementSystem.collegeManagementSystem.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,8 +36,9 @@ public class WebSecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/posts").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/posts","/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/posts","/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/posts/**","/auth/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                         .csrf(csrfConfig -> csrfConfig.disable())
                         .sessionManagement(sessionConfig -> sessionConfig
@@ -48,20 +51,25 @@ public class WebSecurityConfig {
 
 
     //This is basically when we want to pass in the user that we create in the application
-    @Bean
-    UserDetailsService myDetailsService(){
-        UserDetails normalUser = User.withUsername("praj").password(passwordEncoder().encode("pass31")).roles("USER").build();
-
-        UserDetails adminUser = User.withUsername("admin").password(passwordEncoder().encode("admin31")).roles("ADMIN").build();
-
-        return new InMemoryUserDetailsManager(normalUser,adminUser);
-
-    }
+    //@Bean
+//    UserDetailsService myDetailsService(){
+//        UserDetails normalUser = User.withUsername("praj").password(passwordEncoder().encode("pass31")).roles("USER").build();
+//
+//        UserDetails adminUser = User.withUsername("admin").password(passwordEncoder().encode("admin31")).roles("ADMIN").build();
+//
+//        return new InMemoryUserDetailsManager(normalUser,adminUser);
+//
+//    }
 
     //This is for password encoder
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration){
+        return  authenticationConfiguration.getAuthenticationManager();
     }
 
 
