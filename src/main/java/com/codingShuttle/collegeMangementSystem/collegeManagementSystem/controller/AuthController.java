@@ -7,6 +7,9 @@ import com.codingShuttle.collegeMangementSystem.collegeManagementSystem.dto.User
 import com.codingShuttle.collegeMangementSystem.collegeManagementSystem.repository.UserRepository;
 import com.codingShuttle.collegeMangementSystem.collegeManagementSystem.services.AuthService;
 import com.codingShuttle.collegeMangementSystem.collegeManagementSystem.services.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +34,20 @@ public class AuthController {
         return ResponseEntity.ok(userDto);
     }
 
+    //There is another use case lets say customer pases the cookie rather than the username or password.
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO,
+                                        HttpServletRequest request,
+                                        HttpServletResponse response){
 
         String token = authService.login(loginDTO);
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        request.getCookies();
+
+
         return ResponseEntity.ok(token);
 
     }
