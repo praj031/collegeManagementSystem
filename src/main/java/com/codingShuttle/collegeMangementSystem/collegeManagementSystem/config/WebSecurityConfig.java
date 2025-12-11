@@ -1,5 +1,7 @@
 package com.codingShuttle.collegeMangementSystem.collegeManagementSystem.config;
 
+import com.codingShuttle.collegeMangementSystem.collegeManagementSystem.filters.JwtAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,7 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+
+    private final JwtAuthFilter jwtAuthFilter;
 
     //private static final String ADMIN = ;
 
@@ -36,14 +42,15 @@ public class WebSecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/posts","/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/posts","/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/posts/**","/auth/**").hasAnyRole("ADMIN")
+                        .requestMatchers( "/posts","/auth/**").permitAll()
                         .anyRequest().authenticated())
                         .csrf(csrfConfig -> csrfConfig.disable())
                         .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                        .formLogin(Customizer.withDefaults());
+                .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);
+
+
+        //.formLogin(Customizer.withDefaults());
 
 
             return httpSecurity.build();
@@ -61,11 +68,11 @@ public class WebSecurityConfig {
 //
 //    }
 
-    //This is for password encoder
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+//    //This is for password encoder
+//    @Bean
+//    PasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration){
