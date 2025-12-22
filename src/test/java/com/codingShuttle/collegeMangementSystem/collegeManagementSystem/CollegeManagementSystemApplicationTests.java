@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.SQLOutput;
-
 @SpringBootTest
 class CollegeManagementSystemApplicationTests {
 
@@ -22,7 +20,7 @@ class CollegeManagementSystemApplicationTests {
         //Firstly we ar epassing the data of the user
         User user = new User(4l, "pritish@gmail.com", "1234");
         //Getting the generated tokan
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateAccessToken(user);
         //Since we have  id as Long, we are making it as Long
         Long id = jwtService.getUserIdFromTokan(token);
         //Printing the tokan
